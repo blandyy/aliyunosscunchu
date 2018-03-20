@@ -8,10 +8,8 @@ import java.util.List;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.BucketInfo;
-import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.OSSObjectSummary;
-import com.aliyun.oss.model.ObjectListing;
+import com.aliyun.oss.model.*;
+
 public class HelloOSS {
     // endpoint是访问OSS的域名。如果您已经在OSS的控制台上 创建了Bucket，请在控制台上查看域名。
     // 如果您还没有创建Bucket，endpoint选择请参看文档中心的“开发人员指南 > 基本概念 > 访问域名”，
@@ -103,6 +101,22 @@ public class HelloOSS {
         ObjectListing objectListing = ossClient.listObjects(bucketName);
         List<OSSObjectSummary> objectSummary = objectListing.getObjectSummaries();
         return objectSummary;
+    }
+    public String downloadfiele(String filename){
+        // 创建OSSClient实例
+        String messtr = "nnull";
+        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        // 下载object到文件
+        String filedownload = "F:"+ File.separator +"ossdown"+ File.separator + filename;
+        try{
+            ossClient.getObject(new GetObjectRequest(bucketName, filename), new File(filedownload));
+            messtr="successful";
+        }catch (Exception e){
+            messtr="false";
+        }
+        // 关闭client
+        ossClient.shutdown();
+        return messtr;
     }
 
 }
